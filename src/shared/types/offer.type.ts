@@ -1,8 +1,8 @@
-import type { City } from './city.type';
-import type { OfferType } from './offer-type.type';
-import type { Amenity } from './amenity.type';
-import type { Coordinates} from './coordinates.type';
-import type { User } from './user.type';
+import type { City } from './city.type.js';
+import type { OfferType } from './offer-type.type.js';
+import type { Amenity } from './amenity.type.js';
+import type { Coordinates} from './coordinates.type.js';
+import type { User } from './user.type.js';
 
 export type Offer = {
   title: string;

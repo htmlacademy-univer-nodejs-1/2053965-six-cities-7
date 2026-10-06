@@ -7,3 +7,7 @@ export type User = {
   password: string;
   type: UserType;
 };
+
+export function isUserType(value: string): value is UserType {
+  return value === 'regular' || value === 'pro';
+}
