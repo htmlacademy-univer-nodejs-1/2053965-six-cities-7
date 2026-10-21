@@ -8,7 +8,7 @@ export class ImportCommand implements Command {
     return '--import';
   }
 
-  execute(...parameters: string[]) {
+  async execute(...parameters: string[]) {
     const [filename] = parameters;
 
     if (!filename) {
@@ -17,16 +17,17 @@ export class ImportCommand implements Command {
     }
 
     const fileReader = new TsvFileReader(filename.trim());
+    let count = 0;
 
     try {
-      fileReader.read();
-      const offers = fileReader.toArray();
+      for await (const offer of fileReader.read()) {
+        count++;
+        this.printOffer(offer, count);
+      }
 
       console.info(
-        chalk.bold.green(`Импортировано предложений: ${offers.length}`)
+        chalk.bold.green(`Импортировано предложений: ${count}`)
       );
-
-      offers.forEach((offer, index) => this.printOffer(offer, index + 1));
     } catch (error) {
       const message = error instanceof Error
         ? error.message

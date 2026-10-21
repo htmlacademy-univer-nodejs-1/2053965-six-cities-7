@@ -1,34 +1,33 @@
-import { readFileSync } from 'node:fs';
-import { isAmenity, isCity, isOfferType, isUserType } from '../types/index.js';
-import type { FileReader } from './file-reader.js';
-import type { Amenity, City, Offer, OfferType, UserType } from '../types/index.js';
+import {createReadStream} from 'node:fs';
+import {createInterface} from 'node:readline';
+import {isAmenity, isCity, isOfferType, isUserType} from '../../types/index.js';
+import type {Amenity, City, Offer, OfferType, UserType,} from '../../types/index.js';
+import type {FileReaderInterface} from './file-reader.interface.js';
 
-export class TsvFileReader implements FileReader {
-  private rawData = '';
-
-  constructor(private readonly filename: string) {
+export class TsvFileReader implements FileReaderInterface<Offer> {
+  public constructor(private readonly filename: string) {
   }
 
-  public read(): void {
+  public async *read(): AsyncGenerator<Offer> {
+    const readStream = createReadStream(this.filename, {encoding: 'utf8'});
+
+    const lineReader = createInterface({
+      input: readStream,
+      crlfDelay: Infinity,
+    });
+
     try {
-      this.rawData = readFileSync(this.filename, 'utf8');
-    } catch (error) {
-      throw new Error(
-        `Не удалось прочитать файл ${this.filename}.
-        Ошибка: ${error instanceof Error ? error.message : 'Неизвестная ошибка'}.`
-      );
-    }
-  }
+      for await (const line of lineReader) {
+        if (line.trim().length === 0) {
+          continue;
+        }
 
-  public toArray(): Offer[] {
-    if (!this.rawData) {
-      throw new Error('Файл не был прочитан.');
+        yield this.parseOffer(line.split('\t'));
+      }
+    } finally {
+      lineReader.close();
+      readStream.destroy();
     }
-
-    return this.rawData
-      .split('\n')
-      .filter((line) => line.trim().length > 0)
-      .map((line) => this.parseOffer(line.split('\t')));
   }
 
   private parseOffer(lines: string[]): Offer {
