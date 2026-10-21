@@ -2,6 +2,7 @@
 
 import {
   CliApplication,
+  GenerateCommand,
   HelpCommand,
   ImportCommand,
   VersionCommand,
@@ -10,6 +11,7 @@ import {
 const application = new CliApplication();
 application.registerCommands([
   new HelpCommand(),
+  new GenerateCommand(),
   new ImportCommand(),
   new VersionCommand(),
 ]);
