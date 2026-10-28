@@ -13,3 +13,5 @@ coverage
 
 *.tsv
 /generated/
+
+.env

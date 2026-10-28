@@ -1,19 +1,9 @@
 #!/usr/bin/env node
 
-import {
-  CliApplication,
-  GenerateCommand,
-  HelpCommand,
-  ImportCommand,
-  VersionCommand,
-} from './cli/index.js';
+import 'reflect-metadata';
+import {Application, container} from './app/index.js';
+import {Component} from './shared/types/index.js';
 
-const application = new CliApplication();
-application.registerCommands([
-  new HelpCommand(),
-  new GenerateCommand(),
-  new ImportCommand(),
-  new VersionCommand(),
-]);
+const application = container.get<Application>(Component.Application);
 
-application.processCommand(process.argv.slice(2));
+application.init();
