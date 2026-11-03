@@ -5,3 +5,7 @@ export type OfferType = (typeof OFFER_TYPES)[number];
 export function isOfferType(value: string): value is OfferType {
   return OFFER_TYPES.some((type) => type === value);
 }
+
+export function getOfferTypes(): OfferType[] {
+  return [...OFFER_TYPES];
+}

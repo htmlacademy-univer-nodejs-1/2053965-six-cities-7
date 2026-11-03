@@ -12,3 +12,7 @@ export type City = (typeof CITIES)[number];
 export function isCity(value: string): value is City {
   return CITIES.some((city) => city === value);
 }
+
+export function getCities(): City[] {
+  return [...CITIES];
+}

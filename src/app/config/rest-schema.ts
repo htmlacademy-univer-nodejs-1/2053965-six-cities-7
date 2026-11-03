@@ -4,7 +4,7 @@ import validators from 'convict-format-with-validator';
 
 config();
 
-const requiredEnvironmentVariables = ['PORT', 'DB_HOST', 'SALT'];
+const requiredEnvironmentVariables = ['PORT', 'DB_HOST', 'SALT', 'DB_PORT', 'DB_NAME', 'DB_USER', 'DB_PASSWORD'];
 
 for (const variableName of requiredEnvironmentVariables) {
   if (!process.env[variableName]) {
@@ -20,6 +20,10 @@ export type RestSchema = {
   port: number;
   dbHost: string;
   salt: string;
+  dbPort: number;
+  dbName: string;
+  dbUser: string;
+  dbPassword: string;
 };
 
 export const configSchema = convict<RestSchema>({
@@ -40,6 +44,30 @@ export const configSchema = convict<RestSchema>({
     format: String,
     default: '',
     env: 'SALT',
+  },
+  dbPort: {
+    doc: 'Порт базы данных',
+    format: 'port',
+    default: 27017,
+    env: 'DB_PORT',
+  },
+  dbName: {
+    doc: 'Имя базы данных',
+    format: String,
+    default: 'six-cities',
+    env: 'DB_NAME',
+  },
+  dbUser: {
+    doc: 'Имя пользователя базы данных',
+    format: String,
+    default: 'admin',
+    env: 'DB_USER',
+  },
+  dbPassword: {
+    doc: 'Пароль для подключения к базе данных',
+    format: String,
+    default: '',
+    env: 'DB_PASSWORD',
   },
 });
 

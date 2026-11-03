@@ -1,4 +1,5 @@
-export type UserType = 'regular' | 'pro';
+const userTypes = ['regular', 'pro'] as const;
+export type UserType = (typeof userTypes)[number];
 
 export type User = {
   name: string;
@@ -9,5 +10,9 @@ export type User = {
 };
 
 export function isUserType(value: string): value is UserType {
-  return value === 'regular' || value === 'pro';
+  return userTypes.includes(value as UserType);
+}
+
+export function getUserTypes(): UserType[] {
+  return [...userTypes];
 }
