@@ -4,16 +4,6 @@ import validators from 'convict-format-with-validator';
 
 config();
 
-const requiredEnvironmentVariables = ['PORT', 'DB_HOST', 'SALT', 'DB_PORT', 'DB_NAME', 'DB_USER', 'DB_PASSWORD'];
-
-for (const variableName of requiredEnvironmentVariables) {
-  if (!process.env[variableName]) {
-    throw new Error(
-      `Переменная окружения ${variableName} не задана`,
-    );
-  }
-}
-
 convict.addFormats(validators);
 
 export type RestSchema = {
