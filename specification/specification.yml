@@ -43,6 +43,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/user'
+        '400':
+          description: Ошибка валидации данных.
         '403':
           description: Клиент уже авторизован.
         '409':
@@ -455,6 +457,11 @@ components:
               minLength: 1
               maxLength: 15
               example: Keks
+            avatar:
+              type: string
+              description: Необязательное. Путь к изображению .jpg или .png.
+              pattern: '\.(jpg|png)$'
+              example: keks.jpg
             type:
               type: string
               enum: [regular, pro]
@@ -492,7 +499,7 @@ components:
     createOffer:
       type: object
       required:
-        [title, description, city, previewImage, photos, isPremium, type, rooms, guests, price, amenities, coordinates]
+        [title, description, city, previewImage, photos, isPremium, rating, type, rooms, guests, price, amenities, coordinates]
       properties:
         title:
           type: string
@@ -519,6 +526,12 @@ components:
         isPremium:
           type: boolean
           example: true
+        rating:
+          type: number
+          description: От 1 до 5, допускается один знак после запятой.
+          minimum: 1
+          maximum: 5
+          example: 4.5
         type:
           $ref: '#/components/schemas/offerType'
         rooms:
@@ -550,7 +563,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/createOffer'
         - type: object
-          required: [id, postDate, rating, isFavorite, author, commentsCount]
+          required: [id, postDate, isFavorite, author, commentsCount]
           properties:
             id:
               type: string
@@ -558,11 +571,6 @@ components:
             postDate:
               type: string
               format: date-time
-            rating:
-              type: number
-              minimum: 1
-              maximum: 5
-              example: 4.5
             isFavorite:
               type: boolean
               example: false
