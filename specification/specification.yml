@@ -499,7 +499,7 @@ components:
     createOffer:
       type: object
       required:
-        [title, description, city, previewImage, photos, isPremium, rating, type, rooms, guests, price, amenities, coordinates]
+        [title, description, city, previewImage, photos, isPremium, type, rooms, guests, price, amenities, coordinates]
       properties:
         title:
           type: string
@@ -526,12 +526,6 @@ components:
         isPremium:
           type: boolean
           example: true
-        rating:
-          type: number
-          description: От 1 до 5, допускается один знак после запятой.
-          minimum: 1
-          maximum: 5
-          example: 4.5
         type:
           $ref: '#/components/schemas/offerType'
         rooms:
@@ -563,7 +557,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/createOffer'
         - type: object
-          required: [id, postDate, isFavorite, author, commentsCount]
+          required: [id, postDate, rating, isFavorite, author, commentsCount]
           properties:
             id:
               type: string
@@ -571,6 +565,12 @@ components:
             postDate:
               type: string
               format: date-time
+            rating:
+              type: number
+              description: Средняя оценка из комментариев, один знак после запятой. 0 — оценок ещё нет.
+              minimum: 0
+              maximum: 5
+              example: 4.5
             isFavorite:
               type: boolean
               example: false
