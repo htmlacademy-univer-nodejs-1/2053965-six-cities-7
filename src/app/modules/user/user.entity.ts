@@ -1,6 +1,8 @@
-import {prop, modelOptions, defaultClasses, getModelForClass} from '@typegoose/typegoose';
+import {prop, modelOptions, defaultClasses, getModelForClass, Ref} from '@typegoose/typegoose';
 import {getUserTypes, User, UserType} from '../../../shared/types/index.js';
 import {createHash} from 'node:crypto';
+import {Types} from 'mongoose';
+import type {OfferEntity} from '../offer/index.js';
 
 export interface UserEntity extends defaultClasses.Base {}
 
@@ -15,7 +17,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
     required: true,
     trim: true,
     minlength: 1,
-    maxlength: 100,
+    maxlength: 15,
   })
   public name!: string;
 
@@ -50,6 +52,13 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   })
   public type!: UserType;
 
+  @prop({
+    ref: 'OfferEntity',
+    type: () => [Types.ObjectId],
+    default: [],
+  })
+  public favorites!: Ref<OfferEntity>[];
+
   constructor(userData: User) {
     super();
 
@@ -60,7 +69,15 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   }
 
   public setPassword(password: string, salt: string): void {
-    this.password = createHash('sha256').update(password + salt).digest('hex');
+    this.password = UserEntity.hashPassword(password, salt);
+  }
+
+  public verifyPassword(password: string, salt: string): boolean {
+    return this.password === UserEntity.hashPassword(password, salt);
+  }
+
+  private static hashPassword(password: string, salt: string): string {
+    return createHash('sha256').update(password + salt).digest('hex');
   }
 
   public getPassword(): string {

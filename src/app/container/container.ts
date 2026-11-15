@@ -5,8 +5,9 @@ import type {Config, RestSchema} from '../config/index.js';
 import {LoggerService, type Logger} from '../../shared/libs/index.js';
 import {MongoDatabaseClient, type DatabaseClient} from '../database/index.js';
 import {Component} from '../../shared/types/index.js';
-import {registerUserContainer} from '../modules/user/user.container.js';
-import {registerOfferContainer} from '../modules/offer/offer.container.js';
+import {registerUserContainer} from '../modules/user/index.js';
+import {registerOfferContainer} from '../modules/offer/index.js';
+import {registerCommentContainer} from '../modules/comment/index.js';
 
 const container = new Container();
 
@@ -32,5 +33,6 @@ container
 
 registerUserContainer(container);
 registerOfferContainer(container);
+registerCommentContainer(container);
 
 export {container};
