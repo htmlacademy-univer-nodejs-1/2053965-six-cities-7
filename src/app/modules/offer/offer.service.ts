@@ -25,4 +25,16 @@ export class OfferService implements OfferServiceInterface {
   public async findById(id: string): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel.findById(id).exec();
   }
+
+  public async incCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel
+      .findByIdAndUpdate(offerId, {$inc: {commentsCount: 1}}, {new: true})
+      .exec();
+  }
+
+  public async updateRating(offerId: string, rating: number): Promise<DocumentType<OfferEntity> | null> {
+    return this.offerModel
+      .findByIdAndUpdate(offerId, {rating}, {new: true})
+      .exec();
+  }
 }

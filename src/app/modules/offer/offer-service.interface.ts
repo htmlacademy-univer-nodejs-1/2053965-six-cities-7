@@ -5,4 +5,6 @@ import {OfferEntity} from './offer.entity.js';
 export interface OfferServiceInterface {
   create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
   findById(id: string): Promise<DocumentType<OfferEntity> | null>;
+  incCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null>;
+  updateRating(offerId: string, rating: number): Promise<DocumentType<OfferEntity> | null>;
 }
