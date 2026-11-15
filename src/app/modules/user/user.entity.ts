@@ -17,7 +17,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
     required: true,
     trim: true,
     minlength: 1,
-    maxlength: 100,
+    maxlength: 15,
   })
   public name!: string;
 
@@ -69,7 +69,15 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   }
 
   public setPassword(password: string, salt: string): void {
-    this.password = createHash('sha256').update(password + salt).digest('hex');
+    this.password = UserEntity.hashPassword(password, salt);
+  }
+
+  public verifyPassword(password: string, salt: string): boolean {
+    return this.password === UserEntity.hashPassword(password, salt);
+  }
+
+  private static hashPassword(password: string, salt: string): string {
+    return createHash('sha256').update(password + salt).digest('hex');
   }
 
   public getPassword(): string {

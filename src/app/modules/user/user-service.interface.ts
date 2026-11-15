@@ -8,6 +8,7 @@ export interface UserServiceInterface {
   findByEmail(email: string): Promise<DocumentType<UserEntity> | null>;
   findById(id: string): Promise<DocumentType<UserEntity> | null>;
   findOrCreate(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>>;
+  verifyUser(email: string, password: string, salt: string): Promise<DocumentType<UserEntity> | null>;
   findFavorites(userId: string): Promise<DocumentType<OfferEntity>[]>;
   addToFavorites(userId: string, offerId: string): Promise<DocumentType<UserEntity> | null>;
   removeFromFavorites(userId: string, offerId: string): Promise<DocumentType<UserEntity> | null>;

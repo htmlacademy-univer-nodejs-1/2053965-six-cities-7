@@ -41,6 +41,16 @@ export class UserService implements UserServiceInterface {
     return this.create(dto, salt);
   }
 
+  public async verifyUser(email: string, password: string, salt: string): Promise<DocumentType<UserEntity> | null> {
+    const user = await this.findByEmail(email);
+
+    if (!user || !user.verifyPassword(password, salt)) {
+      return null;
+    }
+
+    return user;
+  }
+
   public async findFavorites(userId: string): Promise<DocumentType<OfferEntity>[]> {
     const user = await this.userModel
       .findById(userId)
