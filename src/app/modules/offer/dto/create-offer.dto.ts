@@ -1,4 +1,4 @@
-import {City, Amenity, User, Coordinates, OfferType} from '../../../../shared/types/index.js';
+import {City, Amenity, Coordinates, OfferType} from '../../../../shared/types/index.js';
 
 export class CreateOfferDto {
   public title!: string;
@@ -8,14 +8,11 @@ export class CreateOfferDto {
   public previewImage!: string;
   public photos!: string[];
   public isPremium!: boolean;
-  public isFavorite!: boolean;
-  public rating!: number;
   public type!: OfferType;
   public rooms!: number;
   public guests!: number;
   public price!: number;
   public amenities!: Amenity[];
-  public author!: User;
-  public commentsCount!: number;
+  public authorId!: string;
   public coordinates!: Coordinates;
 }

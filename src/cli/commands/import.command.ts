@@ -66,7 +66,23 @@ export class ImportCommand implements Command {
 
   private async importOffer(offer: Offer, salt: string): Promise<void> {
     const user = await this.userService.findOrCreate(offer.author, salt);
-    await this.offerService.create({ ...offer, author: user.id });
+
+    await this.offerService.create({
+      title: offer.title,
+      description: offer.description,
+      postDate: offer.postDate,
+      city: offer.city,
+      previewImage: offer.previewImage,
+      photos: offer.photos,
+      isPremium: offer.isPremium,
+      type: offer.type,
+      rooms: offer.rooms,
+      guests: offer.guests,
+      price: offer.price,
+      amenities: offer.amenities,
+      authorId: user.id,
+      coordinates: offer.coordinates,
+    });
   }
 }
 
