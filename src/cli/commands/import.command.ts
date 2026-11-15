@@ -5,6 +5,7 @@ import type { Command } from './command.interface.js';
 import {DatabaseClient, MongoDatabaseClient} from '../../app/database/index.js';
 import {OfferModel, OfferService, OfferServiceInterface} from '../../app/modules/offer/index.js';
 import {UserModel, UserService, UserServiceInterface} from '../../app/modules/user/index.js';
+import {CommentModel} from '../../app/modules/comment/index.js';
 import {TsvFileReader, Logger, LoggerService} from '../../shared/libs/index.js';
 
 export class ImportCommand implements Command {
@@ -18,7 +19,7 @@ export class ImportCommand implements Command {
     this.logger = new LoggerService();
     this.databaseClient = new MongoDatabaseClient(this.logger);
     this.userService = new UserService(this.logger, UserModel);
-    this.offerService = new OfferService(this.logger, OfferModel);
+    this.offerService = new OfferService(this.logger, OfferModel, CommentModel, UserModel);
   }
 
   getName(): string {
