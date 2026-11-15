@@ -5,6 +5,7 @@ import { Component } from '../../../shared/types/index.js';
 import {UserServiceInterface} from './user-service.interface.js';
 import { UserEntity } from './user.entity.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
+import type { OfferEntity } from '../offer/index.js';
 
 @injectable()
 export class UserService implements UserServiceInterface {
@@ -38,5 +39,26 @@ export class UserService implements UserServiceInterface {
       return user;
     }
     return this.create(dto, salt);
+  }
+
+  public async findFavorites(userId: string): Promise<DocumentType<OfferEntity>[]> {
+    const user = await this.userModel
+      .findById(userId)
+      .populate<{ favorites: DocumentType<OfferEntity>[] }>('favorites')
+      .exec();
+
+    return user?.favorites ?? [];
+  }
+
+  public async addToFavorites(userId: string, offerId: string): Promise<DocumentType<UserEntity> | null> {
+    return this.userModel
+      .findByIdAndUpdate(userId, { $addToSet: { favorites: offerId } }, { new: true })
+      .exec();
+  }
+
+  public async removeFromFavorites(userId: string, offerId: string): Promise<DocumentType<UserEntity> | null> {
+    return this.userModel
+      .findByIdAndUpdate(userId, { $pull: { favorites: offerId } }, { new: true })
+      .exec();
   }
 }

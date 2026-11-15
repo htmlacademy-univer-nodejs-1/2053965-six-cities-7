@@ -1,6 +1,8 @@
-import {prop, modelOptions, defaultClasses, getModelForClass} from '@typegoose/typegoose';
+import {prop, modelOptions, defaultClasses, getModelForClass, Ref} from '@typegoose/typegoose';
 import {getUserTypes, User, UserType} from '../../../shared/types/index.js';
 import {createHash} from 'node:crypto';
+import {Types} from 'mongoose';
+import type {OfferEntity} from '../offer/index.js';
 
 export interface UserEntity extends defaultClasses.Base {}
 
@@ -49,6 +51,13 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
     enum: getUserTypes(),
   })
   public type!: UserType;
+
+  @prop({
+    ref: 'OfferEntity',
+    type: () => [Types.ObjectId],
+    default: [],
+  })
+  public favorites!: Ref<OfferEntity>[];
 
   constructor(userData: User) {
     super();
