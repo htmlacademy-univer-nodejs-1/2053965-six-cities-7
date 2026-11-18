@@ -9,6 +9,7 @@ import {AppExceptionFilter, type ExceptionFilter} from '../rest/index.js';
 import {registerUserContainer} from '../modules/user/index.js';
 import {registerOfferContainer} from '../modules/offer/index.js';
 import {registerCommentContainer} from '../modules/comment/index.js';
+import {registerFavoriteContainer} from '../modules/favorite/index.js';
 
 const container = new Container();
 
@@ -40,5 +41,6 @@ container
 registerUserContainer(container);
 registerOfferContainer(container);
 registerCommentContainer(container);
+registerFavoriteContainer(container);
 
 export {container};

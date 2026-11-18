@@ -17,6 +17,7 @@ export class Application {
     @inject(Component.ExceptionFilter) private readonly exceptionFilter: ExceptionFilter,
     @inject(Component.UserController) private readonly userController: Controller,
     @inject(Component.OfferController) private readonly offerController: Controller,
+    @inject(Component.FavoriteController) private readonly favoriteController: Controller,
   ) {
     this.server = express();
   }
@@ -61,6 +62,7 @@ export class Application {
   private initControllers(): void {
     this.server.use('/users', this.userController.router);
     this.server.use(this.offerController.router);
+    this.server.use('/favorites', this.favoriteController.router);
   }
 
   private initExceptionFilters(): void {
