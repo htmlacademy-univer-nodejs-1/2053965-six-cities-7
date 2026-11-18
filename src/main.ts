@@ -6,4 +6,4 @@ import {Component} from './shared/types/index.js';
 
 const application = container.get<Application>(Component.Application);
 
-application.init();
+await application.init();
