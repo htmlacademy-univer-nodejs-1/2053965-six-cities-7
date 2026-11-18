@@ -16,6 +16,7 @@ export class Application {
     @inject(Component.DatabaseClient) private readonly databaseClient: DatabaseClient,
     @inject(Component.ExceptionFilter) private readonly exceptionFilter: ExceptionFilter,
     @inject(Component.UserController) private readonly userController: Controller,
+    @inject(Component.OfferController) private readonly offerController: Controller,
   ) {
     this.server = express();
   }
@@ -59,6 +60,7 @@ export class Application {
 
   private initControllers(): void {
     this.server.use('/users', this.userController.router);
+    this.server.use(this.offerController.router);
   }
 
   private initExceptionFilters(): void {

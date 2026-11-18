@@ -8,6 +8,7 @@ export interface OfferServiceInterface {
   create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
   find(limit?: number): Promise<DocumentType<OfferEntity>[]>;
   findById(id: string): Promise<DocumentType<OfferEntity> | null>;
+  findByCity(city: City, limit?: number): Promise<DocumentType<OfferEntity>[]>;
   findPremiumByCity(city: City): Promise<DocumentType<OfferEntity>[]>;
   updateById(id: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null>;
   deleteById(id: string): Promise<DocumentType<OfferEntity> | null>;
