@@ -4,6 +4,7 @@ import type {Config, RestSchema} from './config/index.js';
 import {getMongoURI, type DatabaseClient} from './database/index.js';
 import type {Logger} from '../shared/libs/index.js';
 import {Component} from '../shared/types/index.js';
+import type {ExceptionFilter} from './rest/index.js';
 
 @injectable()
 export class Application {
@@ -13,6 +14,7 @@ export class Application {
     @inject(Component.Config) private readonly config: Config<RestSchema>,
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.DatabaseClient) private readonly databaseClient: DatabaseClient,
+    @inject(Component.ExceptionFilter) private readonly exceptionFilter: ExceptionFilter,
   ) {
     this.server = express();
   }
@@ -22,6 +24,12 @@ export class Application {
 
     this.logger.info('Подключение к базе данных...');
     await this.initDb();
+
+    this.logger.info('Регистрация middleware...');
+    this.initMiddleware();
+
+    this.logger.info('Регистрация фильтров исключений...');
+    this.initExceptionFilters();
 
     this.logger.info('Запуск сервера...');
     await this.initServer();
@@ -39,6 +47,14 @@ export class Application {
     );
 
     return this.databaseClient.connect(mongoUri);
+  }
+
+  private initMiddleware(): void {
+    this.server.use(express.json());
+  }
+
+  private initExceptionFilters(): void {
+    this.server.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
   }
 
   private initServer(): Promise<void> {
