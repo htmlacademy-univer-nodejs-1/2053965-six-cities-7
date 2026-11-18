@@ -4,7 +4,7 @@ import type {Config, RestSchema} from './config/index.js';
 import {getMongoURI, type DatabaseClient} from './database/index.js';
 import type {Logger} from '../shared/libs/index.js';
 import {Component} from '../shared/types/index.js';
-import type {ExceptionFilter} from './rest/index.js';
+import type {Controller, ExceptionFilter} from './rest/index.js';
 
 @injectable()
 export class Application {
@@ -15,6 +15,7 @@ export class Application {
     @inject(Component.Logger) private readonly logger: Logger,
     @inject(Component.DatabaseClient) private readonly databaseClient: DatabaseClient,
     @inject(Component.ExceptionFilter) private readonly exceptionFilter: ExceptionFilter,
+    @inject(Component.UserController) private readonly userController: Controller,
   ) {
     this.server = express();
   }
@@ -27,6 +28,9 @@ export class Application {
 
     this.logger.info('Регистрация middleware...');
     this.initMiddleware();
+
+    this.logger.info('Регистрация контроллеров...');
+    this.initControllers();
 
     this.logger.info('Регистрация фильтров исключений...');
     this.initExceptionFilters();
@@ -51,6 +55,10 @@ export class Application {
 
   private initMiddleware(): void {
     this.server.use(express.json());
+  }
+
+  private initControllers(): void {
+    this.server.use('/users', this.userController.router);
   }
 
   private initExceptionFilters(): void {
