@@ -28,6 +28,7 @@ export class OfferService implements OfferServiceInterface {
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
     const {authorId, ...offerData} = dto;
     const offer = await this.offerModel.create({...offerData, author: authorId});
+    await offer.populate('author');
     this.logger.info(`Создано новое предложение: ${offer.title}`);
     return offer;
   }
@@ -44,6 +45,14 @@ export class OfferService implements OfferServiceInterface {
     return this.offerModel
       .findById(id)
       .populate('author')
+      .exec();
+  }
+
+  public async findByCity(city: City, limit = DEFAULT_OFFER_COUNT): Promise<DocumentType<OfferEntity>[]> {
+    return this.offerModel
+      .find({city})
+      .sort({postDate: -1})
+      .limit(limit)
       .exec();
   }
 
